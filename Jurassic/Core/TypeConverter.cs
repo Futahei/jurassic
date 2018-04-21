@@ -234,6 +234,8 @@ namespace Jurassic
                 result = engine.String.Construct((string)value);
             else if (value is ConcatenatedString)
                 result = engine.String.Construct(value.ToString());
+            else if (value is Data)
+                result = new OMLElementConstructor(engine).Construct(((Data)value).Id);
             else
                 throw new ArgumentException(string.Format("Cannot convert object of type '{0}' to an object.", value.GetType()), nameof(value));
             result.IsExtensible = false;
