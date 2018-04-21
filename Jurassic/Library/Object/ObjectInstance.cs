@@ -271,7 +271,8 @@ namespace Jurassic.Library
             var property = this.GetOwnPropertyDescriptor(index);
             if (property.Exists == true)
             {
-                // The property was found!  Call the getter if there is one.
+                // The property was found!  
+                the getter if there is one.
                 object value = property.Value;
                 var accessor = value as PropertyAccessorValue;
                 if (accessor != null)
@@ -939,6 +940,24 @@ namespace Jurassic.Library
             if ((function is FunctionInstance) == false)
                 throw new JavaScriptException(this.Engine, ErrorType.TypeError, string.Format("Property '{1}' of object {0} is not a function", this.ToString(), functionName));
             return ((FunctionInstance)function).CallLateBound(this, parameters);
+        }
+        
+        /// <summary>
+        /// Calls the function with the given name and define 'this'.  The function must exist on this object or an
+        /// exception will be thrown.
+        /// </summary>
+        /// <param name="thisObject"> 'this'object which you want to define. </param>
+        /// <param name="functionName"> The name of the function to call. </param>
+        /// <param name="parameters"> The parameters to pass to the function. </param>
+        /// <returns> The result of calling the function. </returns>
+        public object CallMemberFunction(object thisObject, string functionName, params object[] parameters)
+        {
+            var function = GetPropertyValue(functionName);
+            if (function == null)
+                throw new JavaScriptException(this.Engine, ErrorType.TypeError, string.Format("Object {0} has no method '{1}'", this.ToString(), functionName));
+            if ((function is FunctionInstance) == false)
+                throw new JavaScriptException(this.Engine, ErrorType.TypeError, string.Format("Property '{1}' of object {0} is not a function", this.ToString(), functionName));
+            return ((FunctionInstance)function).CallLateBound(thisObject, parameters);
         }
 
         /// <summary>
